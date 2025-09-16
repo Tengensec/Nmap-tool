@@ -1,58 +1,90 @@
-!/bin/bash
+#!/bin/bash
 
-# Renkler
+# Renk tanımları
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-CYAN='\033[0;36m'
 YELLOW='\033[1;33m'
-NC='\033[0m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
 
 # Banner
-echo -e "${CYAN}"
-echo '███    ██ ███    ███  █████  ██████ '
-echo '████   ██ ████  ████ ██   ██ ██   ██'
-echo '██ ██  ██ ██ ████ ██ ███████ ██████ '
-echo '██  ██ ██ ██  ██  ██ ██   ██ ██     '
-echo '██   ████ ██      ██ ██   ██ ██     '
+echo -e "${BLUE}"
+echo "=================================="
+echo "         NMAP TOOL v1.0"
+echo "        ULYON CYBER TEAM"
+echo "=================================="
 echo -e "${NC}"
-echo -e "${YELLOW}           NMAP SCANNER TOOL${NC}"
-echo -e "${GREEN}           by ULYON CYBER TEAM${NC}\n"
 
-function menu() {
-    echo -e "${CYAN}Tarama Seçenekleri:${NC}"
-    echo " 1) Hızlı tarama                (nmap -T4 <hedef>)"
-    echo " 2) Tüm portları tara           (nmap -p- <hedef>)"
-    echo " 3) Servis ve versiyon tarama   (nmap -sV <hedef>)"
-    echo " 4) OS tespiti                  (nmap -O <hedef>)"
-    echo " 5) Agresif tarama              (nmap -A <hedef>)"
-    echo " 6) TCP SYN taraması            (sudo nmap -sS <hedef>)"
-    echo " 7) UDP taraması                (sudo nmap -sU <hedef>)"
-    echo " 8) Ping taraması               (nmap -sn <hedef>)"
-    echo " 9) Firewall tespiti            (nmap -sA <hedef>)"
-    echo "10) Script taraması             (nmap -sC <hedef>)"
-    echo ""
-}
+# Menü
+echo -e "${GREEN}[1]${NC} Hızlı Tarama (Quick Scan)"
+echo -e "${GREEN}[2]${NC} Tüm Portları Tara (Full Port Scan)"
+echo -e "${GREEN}[3]${NC} Servis ve Versiyon Bilgisi (Service Detection)"
+echo -e "${GREEN}[4]${NC} OS Tespiti (OS Detection)"
+echo -e "${GREEN}[5]${NC} Aggressive Scan"
+echo -e "${GREEN}[6]${NC} Script Scan"
+echo -e "${GREEN}[7]${NC} Ping Tarama"
+echo -e "${GREEN}[8]${NC} Belirli Portları Tara"
+echo -e "${GREEN}[9]${NC} Tüm Nmap Komutlarını Listele"
+echo -e "${GREEN}[10]${NC} Çıkış"
 
-function run_scan() {
-    echo -e "${YELLOW}[*] Tarama başlatılıyor...${NC}\n"
-    case $1 in
-        1) echo -e "${GREEN}[+] Hızlı tarama...${NC}"; nmap -T4 "$target";;
-        2) echo -e "${GREEN}[+] Tüm portlar taranıyor...${NC}"; nmap -p- "$target";;
-        3) echo -e "${GREEN}[+] Servis ve versiyon bilgisi...${NC}"; nmap -sV "$target";;
-        4) echo -e "${GREEN}[+] OS tespiti...${NC}"; sudo nmap -O "$target";;
-        5) echo -e "${GREEN}[+] Agresif tarama...${NC}"; nmap -A "$target";;
-        6) echo -e "${GREEN}[+] TCP SYN taraması...${NC}"; sudo nmap -sS "$target";;
-        7) echo -e "${GREEN}[+] UDP taraması...${NC}"; sudo nmap -sU "$target";;
-        8) echo -e "${GREEN}[+] Ping sweep...${NC}"; nmap -sn "$target";;
-        9) echo -e "${GREEN}[+] Firewall tespiti...${NC}"; nmap -sA "$target";;
-        10) echo -e "${GREEN}[+] Script taraması...${NC}"; nmap -sC "$target";;
-        *) echo -e "${RED}[!] Geçersiz seçim.${NC}";;
-    esac
-}
+# Kullanıcıdan seçim al
+echo -ne "${YELLOW}[*] Bir seçenek girin (1-10): ${NC}"
+read choice
 
-read -p "$(echo -e ${CYAN}[*] Hedef IP / Domain girin: ${NC})" target
-echo ""
-menu
-read -p "$(echo -e ${YELLOW}[*] Bir seçenek girin (1-10): ${NC})" choice
-echo ""
-run_scan "$choice"
+# Seçime göre işlem
+case $choice in
+    1)
+        echo -ne "${YELLOW}Hedef IP girin: ${NC}"
+        read target
+        nmap -T4 -F $target
+        ;;
+    2)
+        echo -ne "${YELLOW}Hedef IP girin: ${NC}"
+        read target
+        nmap -p- $target
+        ;;
+    3)
+        echo -ne "${YELLOW}Hedef IP girin: ${NC}"
+        read target
+        nmap -sV $target
+        ;;
+    4)
+        echo -ne "${YELLOW}Hedef IP girin: ${NC}"
+        read target
+        nmap -O $target
+        ;;
+    5)
+        echo -ne "${YELLOW}Hedef IP girin: ${NC}"
+        read target
+        nmap -A $target
+        ;;
+    6)
+        echo -ne "${YELLOW}Hedef IP girin: ${NC}"
+        read target
+        nmap -sC $target
+        ;;
+    7)
+        echo -ne "${YELLOW}Hedef IP girin: ${NC}"
+        read target
+        nmap -sn $target
+        ;;
+    8)
+        echo -ne "${YELLOW}Hedef IP girin: ${NC}"
+        read target
+        echo -ne "${YELLOW}Port numaralarını girin (örn: 21,22,80): ${NC}"
+        read ports
+        nmap -p $ports $target
+        ;;
+    9)
+        echo -e "${BLUE}Nmap yardım sayfası açılıyor...${NC}"
+        sleep 1
+        nmap --help | less
+        ;;
+    10)
+        echo -e "${GREEN}Çıkılıyor...${NC}"
+        exit
+        ;;
+    *)
+        echo -e "${RED}Geçersiz seçenek!${NC}"
+        ;;
+esac
