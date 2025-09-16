@@ -1,7 +1,5 @@
 git clone https://github.com/Tengensec/Nmap-tool.git
 
-
-
 #!/bin/bash
 # -----------------------------------------------------------------------------
 # MIT License
