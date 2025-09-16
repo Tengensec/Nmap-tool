@@ -1,4 +1,4 @@
 git clone https://github.com/Tengensec/Nmap-tool.git
 
-chmod chmod +x ulyon-nmap.sh
+chmod +x ulyon-nmap.sh
 
